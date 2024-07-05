@@ -13,17 +13,13 @@ use App\Http\Controllers\PostController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', [PostController::class, 'index'])->name('posts.index');
+Route::resource('posts', PostController::class);
 
-Route::get('/', function () {
-    return view('welcome');
-});
-//Route untuk resource post
-Route::resource('/posts', PostController::class);
-
-//Route untuk halaman statis
-Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-Route::get('/view', [PostController::class, 'view'])->name('posts.view');
-Route::get('/edit', [PostController::class, 'edit'])->name('posts.edit');
+// Rute untuk halaman statis (sebenarnya tidak perlu jika menggunakan resource controller)
+Route::get('/view/{post}', [PostController::class, 'view'])->name('posts.view');
+Route::get('/add', [PostController::class, 'create'])->name('posts.create');
+Route::get('/edit/{post}', [PostController::class, 'edit'])->name('posts.edit');
 Route::get('/login', [PostController::class, 'login'])->name('posts.login');
 
 ?>
