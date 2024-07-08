@@ -2,26 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use Illuminate\Support\Facades\Log;
+use App\Models\Post;;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 class PostController extends Controller
 {
     public function index(): View
     {
-        $posts = Post::latest()->paginate(5);
-        return view('posts.index', ['posts' => $posts]);
+        $posts = Post::latest()->paginate(2);
+        return view('posts.index',compact('posts'));
     }
+    
+    public function generatePDF()
+    {
+        $posts = Post::all();
+        $pdf = PDF::loadView('posts.pdf', compact('posts'));
+        return $pdf->download('posts.pdf');
+    }
+
     public function show($id)
-{
+    {
     $post = Post::findOrFail($id);
 
     return view('posts.show', ['post' => $post]);
-}
-
-
+    }
+    
     public function create()
     {
         return view('posts.create');
